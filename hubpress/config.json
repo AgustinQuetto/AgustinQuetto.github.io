@@ -2,7 +2,8 @@
   "meta": {
     "username": "agustinquetto",
     "repositoryName": "agustinquetto.github.io",
-    "branch": "master"
+    "branch": "master",
+    "cname": ""
   },
   "theme": {
     "name": "casper"
@@ -22,5 +23,27 @@
       null,
       null
     ]
+  },
+  "site": {
+    "title": "",
+    "description": "",
+    "logo": "",
+    "cover": "",
+    "delay": "",
+    "postsPerPage": "",
+    "googleAnalytics": "",
+    "disqus": ""
+  },
+  "socialnetwork": {
+    "email": "agustinquetto@gmail.com",
+    "github": "http://github.com/AgustinQuetto",
+    "twitter": "",
+    "facebook": "https://www.facebook.com/aagusquetto",
+    "googleplus": "",
+    "instagram": "http://instagram.com/agustinquetto",
+    "pinterest": "",
+    "flickr": "",
+    "linkedin": "http://www.linkedin.com/in/agustín-quetto-87136410b",
+    "stackoverflow": ""
   }
 }

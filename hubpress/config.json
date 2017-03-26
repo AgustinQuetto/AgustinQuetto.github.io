@@ -9,10 +9,10 @@
     "name": "ichi"
   },
   "urls": {
-    "site": "https://agustinquetto.github.io",
+    "site": "http://agustinquetto.com",
     "hubpress": "http://agustinquetto.com",
-    "theme": "//agustinquetto.github.io/themes/ichi",
-    "images": "https://agustinquetto.github.io/images"
+    "theme": "//agustinquetto.com/themes/ichi",
+    "images": "http://agustinquetto.com/images"
   },
   "initialisationConfigComponent": {
     "name": "initialise-configuration",

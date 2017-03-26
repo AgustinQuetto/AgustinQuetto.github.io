@@ -1,1 +1,150 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Blog de Agustín Quetto]]></title><description><![CDATA[¡Hola! Bienvenidos a mi blog sobre programación y mis experiencias. Estudio en la Universidad Tecnológica Nacional de Avellaneda,  Argentina.  Desarrollo software web con fines gubernamentales en una ONG como Coordinador de Desarrollo llamada ADESPRA http://adespra.org]]></description><link>http://agustinquetto.com</link><generator>RSS for Node</generator><lastBuildDate>Sun, 26 Mar 2017 21:14:24 GMT</lastBuildDate><atom:link href="http://agustinquetto.com/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl></channel></rss>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Blog de Agustín Quetto]]></title><description><![CDATA[¡Hola! Bienvenidos a mi blog sobre programación y mis experiencias. Estudio en la Universidad Tecnológica Nacional de Avellaneda,  Argentina.  Desarrollo software web con fines gubernamentales en una ONG como Coordinador de Desarrollo llamada ADESPRA http://adespra.org]]></description><link>http://agustinquetto.com</link><generator>RSS for Node</generator><lastBuildDate>Sun, 26 Mar 2017 22:32:09 GMT</lastBuildDate><atom:link href="http://agustinquetto.com/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Coordenadas por Geocodificación PHP]]></title><description><![CDATA[<div class="paragraph">
+<p>Si llegaste a a este post, significa que necesitas obtener la Latitud y Longitud de un sitio mediante el uso de su dirección. Para esto es necesario utilizar un servicio de <strong>geocodificación</strong> de terceros, donde enviaremos los datos anteriormente menciados para que nos sea devuelta las coordenadas.</p>
+</div>
+<div class="paragraph">
+<p>En este ejemplo utilizaremos el tan conocido servicio <strong>Google Maps</strong> y una respuesta mediante la API y URL de manera sencilla.</p>
+</div>
+<div class="paragraph">
+<p>Repositorio: <a href="https://github.com/AgustinQuetto/GeolocationByAddress-LatLang.git" class="bare">https://github.com/AgustinQuetto/GeolocationByAddress-LatLang.git</a></p>
+</div>
+<div class="paragraph">
+<p>Cómo enviaremos/recibiremos los valores:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Devuelve un Lat y Lng de una dirección usando Google Geocoder API.</p>
+</li>
+<li>
+<p>Requiere cualquier clave de la API de Google</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>@param $ opt Una matriz que contiene:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>'Address' &#8658; La dirección a analizar</p>
+</li>
+<li>
+<p>'Sensor' &#8658; 'true' o 'false' como [cadena]</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>@return Una matriz que contiene:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>'Status' &#8658; Booleano que es true en caso de éxito, false en caso de falla</p>
+</li>
+<li>
+<p>'Message' &#8658; 'Success' en caso de éxito, de lo contrario un mensaje de error</p>
+</li>
+<li>
+<p>'Lat' &#8658; La latitud de la dirección</p>
+</li>
+<li>
+<p>'Lon' &#8658; La longitud de la dirección</p>
+</li>
+<li>
+<p>'Address' &#8658; Dirección escrita por el usuario.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ahora con la teoría sabida, comencemos.</p>
+</div>
+<div class="paragraph">
+<p>Crearemos un archivo llamado "<strong>geocode.php</strong>", donde irá el núcleo de nuestro código para resolver nuestro problema y al donde mandaremos la dirección para recibir nuestra respuesta.</p>
+</div>
+<div class="paragraph">
+<p>DECLARAMOS NUESTRA FUNCIÓN</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>function getLatLng($opts) {
+    /* Tomar por XML */
+    $url = 'http://maps.googleapis.com/maps/api/geocode/xml?'
+        . 'address=' . $opts['address'] . '&amp;sensor=' . $opts['sensor'];
+    $dom = new DomDocument();
+    $dom-&gt;load($url);
+    /* La respuesta conteniendo el resultado */
+    $response = array();
+    $xpath = new DomXPath($dom);
+    $statusCode = $xpath-&gt;query("//status");
+    /* Asegúrese de que se devolvió un StatusCode válido antes de comparar */
+    if ($statusCode != false &amp;&amp; $statusCode-&gt;length &gt; 0
+        &amp;&amp; $statusCode-&gt;item(0)-&gt;nodeValue == "OK") {
+        $latDom = $xpath-&gt;query("//location/lat");
+        $lonDom = $xpath-&gt;query("//location/lng");
+        $addressDom = $xpath-&gt;query("//formatted_address");
+        /* Si contiene una latitud, siempre poseera una longitud */
+        if ($latDom-&gt;length &gt; 0) {
+            $response = array (
+                'status' 	=&gt; true,
+                'message' 	=&gt; 'Success',
+                'lat' 		=&gt; $latDom-&gt;item(0)-&gt;nodeValue,
+                'lon' 		=&gt; $lonDom-&gt;item(0)-&gt;nodeValue,
+                'address'	=&gt; $addressDom-&gt;item(0)-&gt;nodeValue
+            );
+            return $response;
+        }
+    }
+    $response = array (
+        'status' =&gt; false,
+        'message' =&gt; "Error in Geocoding. Please check Address."
+    );
+    return $response;
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Como puedes leer, si obtenemos una respuesta mediante la dirección enviada por POST a la URL, parseamos a un array para poder manipular los valores a nuestro gusto y poder utilizarlos.</p>
+</div>
+<div class="paragraph">
+<p>Si los valores enviados son incorrectos, obtendremos una respuesta falsa y un mensaje de que verifiquemos la dirección enviada.</p>
+</div>
+<div class="paragraph">
+<p>¡Excelente! Podríamos decir que nuestro sistema ya está listo. Ahora debemos probarlo.</p>
+</div>
+<div class="paragraph">
+<p>Crearemos un archivo llamado "<strong>example.php</strong>", "<strong>testing.php</strong>" o el nombre que les plazca. Solo lo utilizaremos para enviar un formulario con la dirección y probar el <strong>geocode.php</strong>.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;form&gt;
+     Address:&lt;br&gt;
+     &lt;input type="text" name="address"&gt;&lt;br&gt;
+     &lt;input type="submit" name="send"&gt;
+&lt;/form&gt;
+&lt;?php
+require_once 'geocode.php';
+if (isset($_GET['address'])) {
+// Definimos la dirección y el sensor en false.
+$opt = array (
+    'address' =&gt; urlencode($_GET['address']),
+    'sensor'  =&gt; 'false'
+);
+// Ahora simplemente llamamos a la función.
+$result = getLatLng($opt);
+// Si todo sale bien, imprimimos los resultados.
+if ($result['status']) {
+   echo '&lt;pre&gt;';
+   print_r($result);
+   echo '&lt;/pre&gt;';
+   print_r($result['lat']);
+}
+}
+?&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Eso es todo. Ya deberíamos recibir como respuesta un array con la latitud, longitud e información extra.</p>
+</div>
+<div class="paragraph">
+<p>No olviden comentar si tuvieron algún problema, dudas, consejos o agradecimientos.</p>
+</div>]]></description><link>http://agustinquetto.com/2017/03/26/Coordenadas-por-Geocodificacion-PHP.html</link><guid isPermaLink="true">http://agustinquetto.com/2017/03/26/Coordenadas-por-Geocodificacion-PHP.html</guid><dc:creator><![CDATA[Agustín Ramiro Quetto Garay Lima]]></dc:creator><pubDate>Sun, 26 Mar 2017 00:00:00 GMT</pubDate></item></channel></rss>

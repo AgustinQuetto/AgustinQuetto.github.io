@@ -1,0 +1,76 @@
+= Coordenadas por Geocodificación PHP
+// See https://hubpress.gitbooks.io/hubpress-knowledgebase/content/ for information about the parameters.
+// :hp-image: /covers/cover.png
+// :published_at: 2019-01-31
+// :hp-tags: HubPress, Blog, Open_Source,
+// :hp-alt-title: coordenadasgeocodificacionphp
+
+
+Si llegaste a a este post, significa que necesitas obtener la Latitud y Longitud de un sitio mediante el uso de su dirección. Para esto es necesario utilizar un servicio de *geocodificación*, donde enviaremos los datos anteriormente menciados para que nos sean devuelta las coordenadas.
+
+En este ejemplo utilizaremos el tan conocido servicio *Google Maps* y una respuesta mediante la API y URL de manera sencilla.
+
+Repositorio: https://github.com/AgustinQuetto/GeolocationByAddress-LatLang.git
+
+Cómo enviaremos/recibiremos los valores:
+
+ * Devuelve un Lat y Lng de una dirección usando Google Geocoder API. No es asi
+ * Requiere cualquier clave de la API de Google
+
+@param $ opt Una matriz que contiene
+ * 'Address' => La dirección a analizar
+ * 'Sensor' => 'true' o 'false' como [cadena]
+
+@return Una matriz que contiene
+ * 'Status' => Boolean que es true en caso de éxito, false on failure
+ * 'Message' => 'Success' en caso de éxito, de lo contrario un mensaje de error
+ * 'Lat' => El Lat de la dirección
+ * 'Lon' => El Lng de la dirección
+ * 'Address' => Dirección escrita por el usuario.
+
+
+
+
+*function getLatLng($opts) {*
+
+	/* Tomar por XML */
+	$url = 'http://maps.googleapis.com/maps/api/geocode/xml?' 
+		. 'address=' . $opts['address'] . '&sensor=' . $opts['sensor'];
+	$dom = new DomDocument();
+	$dom->load($url);
+    
+	/* La respuesta conteniendo el resultado */
+	$response = array();
+	$xpath = new DomXPath($dom);
+	$statusCode = $xpath->query("//status");
+    
+	/* Asegúrese de que se devolvió un StatusCode válido antes de comparar */
+	if ($statusCode != false && $statusCode->length > 0 
+		&& $statusCode->item(0)->nodeValue == "OK") {
+		$latDom = $xpath->query("//location/lat");
+		$lonDom = $xpath->query("//location/lng");
+		$addressDom = $xpath->query("//formatted_address");
+        
+		/* Si contiene una latitud, siempre poseera una longitud */
+		if ($latDom->length > 0) {
+			$response = array (
+				'status' 	=> true,
+				'message' 	=> 'Success',
+				'lat' 		=> $latDom->item(0)->nodeValue,
+				'lon' 		=> $lonDom->item(0)->nodeValue,
+				'address'	=> $addressDom->item(0)->nodeValue
+			);
+			return $response;
+		}	
+	}
+	$response = array (
+		'status' => false,
+		'message' => "Error in Geocoding. Please check Address."
+	);
+	return $response;
+    
+*}*
+
+Como puedes leer, si obtenemos una respuesta mediante la dirección enviada por POST a la URL, parseamos a un array para poder manipular los valores a nuestro gusto y poder utilizarlos.
+
+Si los valores enviados son incorrectos, obtendremos una respuesta falsa y un mensaje de que verifiquemos la dirección enviada.

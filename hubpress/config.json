@@ -27,9 +27,9 @@
   "site": {
     "title": "Blog de Agustín Quetto",
     "description": "¡Hola! Bienvenidos a mi blog sobre programación y mis experiencias. <br>Estudio en la Universidad Tecnológica Nacional de Avellaneda,  Argentina.  <br>Desarrollo software web con fines gubernamentales en una ONG como Coordinador de Desarrollo llamada ADESPR.<br> http://adespra.org",
-    "logo": "",
-    "cover": "",
-    "delay": "",
+    "logo": "https://yt3.ggpht.com/-_PYO0BlQGEo/AAAAAAAAAAI/AAAAAAAAAAA/U_tcEVvCyA4/s900-c-k-no-mo-rj-c0xffffff/photo.jpg",
+    "cover": "https://yt3.ggpht.com/-_PYO0BlQGEo/AAAAAAAAAAI/AAAAAAAAAAA/U_tcEVvCyA4/s900-c-k-no-mo-rj-c0xffffff/photo.jpg",
+    "delay": "300",
     "postsPerPage": "",
     "googleAnalytics": "UA-96175296-1",
     "disqus": "agustinquetto"

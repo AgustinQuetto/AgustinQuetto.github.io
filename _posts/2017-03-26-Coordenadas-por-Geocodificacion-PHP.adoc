@@ -38,45 +38,40 @@ Crearemos un archivo llamado "*geocode.php*", donde irá el núcleo de nuestro c
 
 DECLARAMOS NUESTRA FUNCIÓN
 
-*function getLatLng($opts) {*
-
-	/* Tomar por XML */
-	$url = 'http://maps.googleapis.com/maps/api/geocode/xml?' 
-		. 'address=' . $opts['address'] . '&sensor=' . $opts['sensor'];
-	$dom = new DomDocument();
-	$dom->load($url);
-    
-	/* La respuesta conteniendo el resultado */
-	$response = array();
-	$xpath = new DomXPath($dom);
-	$statusCode = $xpath->query("//status");
-    
-	/* Asegúrese de que se devolvió un StatusCode válido antes de comparar */
-	if ($statusCode != false && $statusCode->length > 0 
-		&& $statusCode->item(0)->nodeValue == "OK") {
-		$latDom = $xpath->query("//location/lat");
-		$lonDom = $xpath->query("//location/lng");
-		$addressDom = $xpath->query("//formatted_address");
-        
-		/* Si contiene una latitud, siempre poseera una longitud */
-		if ($latDom->length > 0) {
-			$response = array (
-				'status' 	=> true,
-				'message' 	=> 'Success',
-				'lat' 		=> $latDom->item(0)->nodeValue,
-				'lon' 		=> $lonDom->item(0)->nodeValue,
-				'address'	=> $addressDom->item(0)->nodeValue
-			);
-			return $response;
-		}	
-	}
-	$response = array (
-		'status' => false,
-		'message' => "Error in Geocoding. Please check Address."
-	);
-	return $response;
-    
-*}*
+  function getLatLng($opts) {
+      /* Tomar por XML */
+      $url = 'http://maps.googleapis.com/maps/api/geocode/xml?' 
+          . 'address=' . $opts['address'] . '&sensor=' . $opts['sensor'];
+      $dom = new DomDocument();
+      $dom->load($url);
+      /* La respuesta conteniendo el resultado */
+      $response = array();
+      $xpath = new DomXPath($dom);
+      $statusCode = $xpath->query("//status");
+      /* Asegúrese de que se devolvió un StatusCode válido antes de comparar */
+      if ($statusCode != false && $statusCode->length > 0 
+          && $statusCode->item(0)->nodeValue == "OK") {
+          $latDom = $xpath->query("//location/lat");
+          $lonDom = $xpath->query("//location/lng");
+          $addressDom = $xpath->query("//formatted_address");
+          /* Si contiene una latitud, siempre poseera una longitud */
+          if ($latDom->length > 0) {
+              $response = array (
+                  'status' 	=> true,
+                  'message' 	=> 'Success',
+                  'lat' 		=> $latDom->item(0)->nodeValue,
+                  'lon' 		=> $lonDom->item(0)->nodeValue,
+                  'address'	=> $addressDom->item(0)->nodeValue
+              );
+              return $response;
+          }	
+      }
+      $response = array (
+          'status' => false,
+          'message' => "Error in Geocoding. Please check Address."
+      );
+      return $response;
+  }
 
 Como puedes leer, si obtenemos una respuesta mediante la dirección enviada por POST a la URL, parseamos a un array para poder manipular los valores a nuestro gusto y poder utilizarlos.
 
@@ -112,3 +107,7 @@ Crearemos un archivo llamado "*example.php*", "*testing.php*" o el nombre que le
   }
   }
   ?>
+  
+Eso es todo. Ya deberíamos recibir como respuesta un array con la latitud, longitud e información extra.
+
+No olviden comentar si tuvieron algún problema, dudas, consejos o agradecimientos.

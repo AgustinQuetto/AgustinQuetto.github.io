@@ -25,14 +25,14 @@
     ]
   },
   "site": {
-    "title": "",
-    "description": "",
+    "title": "Blog de Agustín Quetto",
+    "description": "¡Hola! Bienvenidos a mi blog. Soy programador, estudio en la Universidad Tecnológica Nacional de Avellaneda en Argentina y desarrollo software web con fines gubernamentales.",
     "logo": "",
     "cover": "",
     "delay": "",
     "postsPerPage": "",
-    "googleAnalytics": "",
-    "disqus": ""
+    "googleAnalytics": "UA-96175296-1",
+    "disqus": "agustinquetto"
   },
   "socialnetwork": {
     "email": "agustinquetto@gmail.com",

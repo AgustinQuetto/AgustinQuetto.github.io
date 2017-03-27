@@ -6,7 +6,7 @@
 // :hp-alt-title: coordenadasgeocodificacionphp
 
 
-Si llegaste a a este post, significa que necesitas obtener la Latitud y Longitud de un sitio mediante el uso de su dirección. Para esto es necesario utilizar un servicio de *geocodificación* de terceros, donde enviaremos los datos anteriormente menciados para que nos sea devuelta las coordenadas.
+Si llegaste a esta publicación, significa que necesitas obtener la Latitud y Longitud de un sitio mediante el uso de su dirección y aún no sabes como. Para esto es necesario utilizar un servicio de *geocodificación* de terceros, donde enviaremos los datos anteriormente menciados para que nos sea devuelta las coordenadas.
 
 En este ejemplo utilizaremos el tan conocido servicio *Google Maps* y una respuesta mediante la API y URL de manera sencilla.
 
